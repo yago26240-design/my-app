@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.senai.mycarterinhasenai.feature.carterinha.presentantion.screen.CarterinhaScreen
-import com.senai.mycarterinhasenai.feature.login.presention.screen.LoginSreen
+import com.senai.mycarterinhasenai.feature.login.presention.screen.LoginScreen
 
 
 @Composable
@@ -22,7 +21,7 @@ fun AppNavHost(
         startDestination = Routes.Login.route
     ){
         composable(Routes.Login.route){
-            LoginSreen()
+            LoginScreen(navController = navController)
         }
         composable(Routes.Carterinha.route) {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
