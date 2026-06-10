@@ -1,6 +1,6 @@
 package com.senai.mycarterinhasenai.feature.unidadecurriculares.domain.model
 
-import android.R
+
 
 data class UnidadeCurricular (
     val id: String,

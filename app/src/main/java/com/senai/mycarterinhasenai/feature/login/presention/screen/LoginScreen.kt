@@ -13,6 +13,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,68 +32,69 @@ fun LoginScreen(
     navController: NavController = NavController(LocalContext.current),
     modifier: Modifier = Modifier
 ) {
+
+    var email by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement
-            .spacedBy(10.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.spacedBy(
+            10.dp,
+            Alignment.CenterVertically
+        ),
         modifier = Modifier.fillMaxSize()
+    ) {
 
-    ){
         Text(
             text = "Login",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
-        TextField(
-            value = "",
-            onValueChange = {},
-            label =  {
-                Text(
-                    text = "Email"
-                )
-            }
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label =  {
-                Text(
-                    text = "Senha"
-                )
 
+        TextField(
+            value = email,
+            onValueChange = { email = it },
+            label = {
+                Text("Email")
             }
         )
+
+        OutlinedTextField(
+            value = senha,
+            onValueChange = { senha = it },
+            label = {
+                Text("Senha")
+            }
+        )
+
         Button(
-            onClick = {navController.navigate(Routes.Carterinha.route)},
-            shape = RoundedCornerShape(size = 4.dp),
+            onClick = {
+                navController.navigate(Routes.Home.route) {
+                    popUpTo(Routes.Login.route) {
+                        inclusive = true
+                    }
+                }
+            },
+            shape = RoundedCornerShape(4.dp),
             border = BorderStroke(
-                width = 5.dp,
-            color = MaterialTheme.colorScheme.primary
+                width = 2.dp,
+                color = MaterialTheme.colorScheme.primary
             ),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ),
-            modifier = Modifier
-                .fillMaxWidth(fraction = .6f)
-
-
+            modifier = Modifier.fillMaxWidth(0.6f)
         ) {
-            Text(
-                text = "Entrar",
-
-            )
-
-
+            Text("Entrar")
         }
-
-
     }
-
 }
-@Preview(showBackground = true,
+
+@Preview(
+    showBackground = true,
     showSystemUi = true
-    )
+)
 @Composable
-fun LoginScreenPreview(){
+fun LoginScreenPreview() {
     LoginScreen()
 }
