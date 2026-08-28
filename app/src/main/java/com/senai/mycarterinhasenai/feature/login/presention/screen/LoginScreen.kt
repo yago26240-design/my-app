@@ -24,17 +24,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.senai.mycarterinhasenai.app.navigation.Routes
+import com.senai.mycarterinhasenai.feature.login.presention.LoginEvent
+import com.senai.mycarterinhasenai.feature.login.presention.LoginViewModel
 
 @Composable
 fun LoginScreen(
+    modifier: Modifier = Modifier,
     navController: NavController = NavController(LocalContext.current),
-    modifier: Modifier = Modifier
-) {
+ viewModel: LoginViewModel = viewModel()
+)
 
-    var email by remember { mutableStateOf("") }
-    var senha by remember { mutableStateOf("") }
+{
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,28 +57,33 @@ fun LoginScreen(
         )
 
         TextField(
-            value = email,
-            onValueChange = { email = it },
+            value = uiState.usuario,
+            onValueChange = { value ->
+                viewModel.onEvent(LoginEvent.OnUsuarioChange(value))
+            },
             label = {
-                Text("Email")
+                Text(
+                    text= "Email")
             }
         )
 
         OutlinedTextField(
-            value = senha,
-            onValueChange = { senha = it },
+            value = uiState.senha,
+            onValueChange = {  value ->
+                viewModel.onEvent(LoginEvent.OnSenhaChange(value))
+    },
+
             label = {
-                Text("Senha")
+                Text(
+                    text = "Senha")
+
+
             }
         )
 
         Button(
             onClick = {
-                navController.navigate(Routes.Home.route) {
-                    popUpTo(Routes.Login.route) {
-                        inclusive = true
-                    }
-                }
+                viewModel.onEvent(LoginEvent.OnEntrarClick)
             },
             shape = RoundedCornerShape(4.dp),
             border = BorderStroke(
