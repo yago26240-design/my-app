@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.senai.mycarterinhasenai.app.navigation.Routes
+import com.senai.mycarterinhasenai.feature.login.domain.model.UsuarioLogado
 import com.senai.mycarterinhasenai.feature.login.presention.LoginEvent
 import com.senai.mycarterinhasenai.feature.login.presention.LoginViewModel
 
@@ -35,11 +37,20 @@ import com.senai.mycarterinhasenai.feature.login.presention.LoginViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController = NavController(LocalContext.current),
- viewModel: LoginViewModel = viewModel()
+ viewModel: LoginViewModel = viewModel(),
+    onLoginSuceso:(UsuarioLogado)-> Unit = {}
 )
 
 {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.usuarioLogado) {
+        uiState.usuarioLogado?.let{
+            usuario ->
+            viewModel.onEvent(LoginEvent.OnNevegacaoRealizada)
+            onLoginSuceso(usuario)
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +62,7 @@ fun LoginScreen(
     ) {
 
         Text(
-            text = "Login",
+            text = "LOGIN",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )

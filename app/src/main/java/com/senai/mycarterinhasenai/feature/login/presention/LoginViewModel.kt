@@ -31,7 +31,7 @@ class LoginViewModel(
             is LoginEvent.OnSenhaChange -> {
                 _uiState.update { state ->
                     state.copy(
-                        usuario = event.value,
+                        senha = event.value,
                         erroMessage = null
                     )
                 }
