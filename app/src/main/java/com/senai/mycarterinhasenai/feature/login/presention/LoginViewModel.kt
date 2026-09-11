@@ -2,8 +2,8 @@ package com.senai.mycarterinhasenai.feature.login.presention
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.senai.mycarterinhasenai.feature.login.data.repository.FakeLoginRepositoryIpl
 import com.senai.mycarterinhasenai.feature.login.data.repository.LoginRepository
+import com.senai.mycarterinhasenai.feature.login.data.repository.LoginRepositoryProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,14 +11,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val repository: LoginRepository = FakeLoginRepositoryIpl()
-): ViewModel() {
+    private val repository: LoginRepository = LoginRepositoryProvider.provide()
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(value = LoginUIState())
+    private val _uiState = MutableStateFlow(LoginUIState())
     val uiState: StateFlow<LoginUIState> = _uiState.asStateFlow()
 
-    fun onEvent(event: LoginEvent){
-        when(event) {
+    fun onEvent(event: LoginEvent) {
+        when (event) {
             is LoginEvent.OnUsuarioChange -> {
                 _uiState.update { state ->
                     state.copy(
@@ -27,7 +27,6 @@ class LoginViewModel(
                     )
                 }
             }
-
             is LoginEvent.OnSenhaChange -> {
                 _uiState.update { state ->
                     state.copy(
@@ -36,24 +35,25 @@ class LoginViewModel(
                     )
                 }
             }
-
-            LoginEvent.OnNevegacaoRealizada -> {
+            LoginEvent.OnNavegacaoRealizada -> {
                 _uiState.update {
                     it.copy(
                         usuarioLogado = null
                     )
                 }
             }
+
             LoginEvent.OnEntrarClick -> fazerLogin()
         }
     }
+
     private fun fazerLogin() {
-     val state = _uiState.value
+        val state = _uiState.value
 
         if(state.usuario.isBlank() || state.senha.isBlank()){
             _uiState.update {
                 it.copy(
-                    erroMessage = "preencha login e senha"
+                    erroMessage = "Preencha login e senha"
                 )
             }
             return
@@ -62,21 +62,21 @@ class LoginViewModel(
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isLoadin = true,
+                    isLoading = true,
                     erroMessage = null,
                     usuarioLogado = null
                 )
             }
-            val result = repository.Login(
-                usuario = state.usuario.trim(),
-                senha = state.senha.trim()
+            val result = repository.login(
+                state.usuario.trim(),
+                state.senha.trim()
             )
 
             result
-                .onSuccess{ usuarioLogado ->
+                .onSuccess { usuarioLogado ->
                     _uiState.update {
                         it.copy(
-                            isLoadin = false,
+                            isLoading = false,
                             erroMessage = null,
                             usuarioLogado = usuarioLogado
                         )
@@ -85,12 +85,13 @@ class LoginViewModel(
                 .onFailure { throwable ->
                     _uiState.update {
                         it.copy(
-                            isLoadin = false,
-                            erroMessage = throwable.message ?:"erro ao fazer Login"
+                            isLoading = false,
+                            erroMessage = throwable.message ?: "Erro ao fazer Login"
                         )
                     }
                 }
-
         }
-         }
+    }
+
+
 }

@@ -47,7 +47,7 @@ fun LoginScreen(
     LaunchedEffect(uiState.usuarioLogado) {
         uiState.usuarioLogado?.let{
             usuario ->
-            viewModel.onEvent(LoginEvent.OnNevegacaoRealizada)
+            viewModel.onEvent(LoginEvent.OnNavegacaoRealizada)
             onLoginSuceso(usuario)
         }
     }

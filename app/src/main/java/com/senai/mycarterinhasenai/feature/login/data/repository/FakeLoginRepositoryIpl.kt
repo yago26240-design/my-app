@@ -4,7 +4,7 @@ import kotlinx.coroutines.delay
 
 class FakeLoginRepositoryIpl : LoginRepository{
 
-    override suspend fun Login(
+    override suspend fun login(
         usuario: String,
         senha: String
     ): Result<UsuarioLogado>{

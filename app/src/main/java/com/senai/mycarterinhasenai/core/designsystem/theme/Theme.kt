@@ -1,4 +1,4 @@
-package com.senai.mycarterinhasenai.core.designsystem.theme
+    package com.senai.mycarterinhasenai.core.designsystem.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
