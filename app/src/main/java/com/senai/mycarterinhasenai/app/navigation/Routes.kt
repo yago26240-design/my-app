@@ -1,16 +1,15 @@
 package com.senai.mycarterinhasenai.app.navigation
 
+
 sealed class Routes (val route: String){
 
-    data object Login : Routes(route = "login")
 
-    data object Home : Routes(route = "home")
+    data object Login : Routes("login")
 
-    object UnidadeCurricular : Routes("unidade_curricular")
-    data object Carterinha : Routes (route = "carterinha")
+    data object Carteirinha : Routes("carteirinha")
 
+    data object HomeAluno : Routes("homeAluno")
 
-
+    data object UCAluno : Routes("ucAluno")
 
 }
-

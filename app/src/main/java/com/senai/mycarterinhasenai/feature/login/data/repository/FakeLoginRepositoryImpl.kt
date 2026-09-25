@@ -2,7 +2,7 @@ package com.senai.mycarterinhasenai.feature.login.data.repository
 import com.senai.mycarterinhasenai.feature.login.domain.model.UsuarioLogado
 import kotlinx.coroutines.delay
 
-class FakeLoginRepositoryIpl : LoginRepository{
+class FakeLoginRepositoryImpl : LoginRepository{
 
     override suspend fun login(
         usuario: String,

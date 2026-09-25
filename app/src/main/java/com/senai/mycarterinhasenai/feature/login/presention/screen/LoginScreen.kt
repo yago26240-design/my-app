@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,8 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,37 +40,35 @@ import com.senai.mycarterinhasenai.feature.login.presention.LoginViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navController: NavController = NavController(LocalContext.current),
- viewModel: LoginViewModel = viewModel(),
-    onLoginSuceso:(UsuarioLogado)-> Unit = {}
-)
-
-{
+    navController: NavController = NavController(
+        LocalContext.current
+    ),
+    viewModel: LoginViewModel = viewModel(),
+    onLoginSucesso:(UsuarioLogado)-> Unit = {}
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.usuarioLogado) {
         uiState.usuarioLogado?.let{
-            usuario ->
+                usuario ->
             viewModel.onEvent(LoginEvent.OnNavegacaoRealizada)
-            onLoginSuceso(usuario)
+            onLoginSucesso(usuario)
         }
     }
 
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            10.dp,
-            Alignment.CenterVertically
-        ),
-        modifier = Modifier.fillMaxSize()
+        verticalArrangement = Arrangement
+            .spacedBy(10.dp, Alignment.CenterVertically),
+        modifier = Modifier
+            .fillMaxSize()
     ) {
-
         Text(
-            text = "LOGIN",
+            text = "Login",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
-
         TextField(
             value = uiState.usuario,
             onValueChange = { value ->
@@ -74,39 +76,62 @@ fun LoginScreen(
             },
             label = {
                 Text(
-                    text= "Email")
-            }
+                    text = "Email"
+                )
+            },
+            isError = uiState.erroMessage != null
         )
-
         OutlinedTextField(
             value = uiState.senha,
-            onValueChange = {  value ->
+            onValueChange = { value ->
                 viewModel.onEvent(LoginEvent.OnSenhaChange(value))
-    },
-
+            },
             label = {
                 Text(
-                    text = "Senha")
-
-
-            }
+                    text = "Senha"
+                )
+            },
+            isError = uiState.erroMessage != null
         )
+
+        uiState.erroMessage?.let{ error ->
+            Text(
+                text = error,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.fillMaxWidth(0.85f)
+            )
+        }
 
         Button(
             onClick = {
                 viewModel.onEvent(LoginEvent.OnEntrarClick)
             },
-            shape = RoundedCornerShape(4.dp),
+            shape = RoundedCornerShape(size = 4.dp),
             border = BorderStroke(
                 width = 2.dp,
-                color = MaterialTheme.colorScheme.primary
+                color = androidx.compose.ui.graphics.Color.Black
             ),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
+                contentColor = MaterialTheme.colorScheme.secondary
             ),
-            modifier = Modifier.fillMaxWidth(0.6f)
+            modifier = Modifier
+                .fillMaxWidth(.6f)
         ) {
-            Text("Entrar")
+            if (uiState.isLoading){
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth(0.60f)
+                        .height(5.dp),
+                    color = Color.White,
+                    trackColor = Color.White.copy(alpha = 0.35f)
+                )
+            }else {
+                Text(
+                    text = "Entrar",
+                    color = Color.White
+                )
+            }
         }
     }
 }

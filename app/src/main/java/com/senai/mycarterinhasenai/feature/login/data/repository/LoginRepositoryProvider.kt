@@ -9,7 +9,7 @@ object LoginRepositoryProvider {
 
     fun provide(): LoginRepository {
         return if (USE_FAKE_REPOSITORY) {
-            FakeLoginRepositoryIpl()
+            FakeLoginRepositoryImpl()
         } else {
             ApiLoginRepositoryImpl(NetworkFactory.createAuthApi())
         }

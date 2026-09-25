@@ -12,7 +12,9 @@ import com.senai.mycarterinhasenai.app.navigation.Routes
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    modifier: Modifier = Modifier
+
 ) {
 
     Column(
@@ -30,7 +32,7 @@ fun HomeScreen(
 
         Button(
             onClick = {
-                navController.navigate(Routes.Carterinha.route)
+                navController.navigate(Routes.Carteirinha.route)
             }
         ) {
             Text("Carteirinha")
@@ -40,7 +42,7 @@ fun HomeScreen(
 
         Button(
             onClick = {
-                navController.navigate(Routes.UnidadeCurricular.route)
+                navController.navigate(Routes.UCAluno.route)
             }
         ) {
             Text("Unidades Curriculares")

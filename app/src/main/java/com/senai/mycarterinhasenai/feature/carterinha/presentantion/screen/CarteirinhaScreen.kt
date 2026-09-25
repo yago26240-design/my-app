@@ -17,7 +17,7 @@ import com.senai.mycarterinhasenai.feature.carterinha.presentantion.component.Pe
 
 
 @Composable
-fun CarterinhaScreen(
+fun CarteirinhaScreen(
     modifier: Modifier = Modifier
 ){
     Box {
