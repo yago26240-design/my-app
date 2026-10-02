@@ -1,4 +1,4 @@
-package com.rafaelcosta.myapplication
+package com.senai.mycarterinhasenai.myapplication
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -57,4 +57,3 @@ fun gerarQrCode(
 
     return bitmap
 }
-

@@ -22,40 +22,40 @@ import com.senai.mycarterinhasenai.feature.unidadecurriculares.presentation.scre
 fun UnidadeCurricularCard(
     modifier: Modifier = Modifier,
     unidadeCurricular: UnidadeCurricular
-){
+) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(3.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(text = unidadeCurricular.nome,
+            Text(
+                text = unidadeCurricular.nome,
                 style = MaterialTheme.typography.titleLarge
-
             )
-            Text(text = "Professor:${unidadeCurricular.professor}",
+            Text(
+                text = "Professor: ${unidadeCurricular.professor}",
                 style = MaterialTheme.typography.bodyMedium
-
-                )
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = "N1: ${unidadeCurricular.nota1}")
                 Text(text = "N2: ${unidadeCurricular.nota2}")
-                Text(text = "media:${unidadeCurricular.media}")
+                Text(text = "Média: ${unidadeCurricular.media}")
             }
-
-                Text(text = "faltas: ${unidadeCurricular.faltas}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
+            Text(
+                text = "Faltas: ${unidadeCurricular.faltas}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }
@@ -63,15 +63,15 @@ fun UnidadeCurricularCard(
     showBackground = true
 )
 @Composable
-fun UnidadeCurricularCardPreview(){
+fun UnidadeCurricularCardPreview() {
     UnidadeCurricularCard(
         unidadeCurricular = UnidadeCurricular(
             id = "1",
-            nome = "Matematica",
-            professor = "Dr. Yagox",
-            nota1 = 5.6,
-            nota2 = 9.8,
-            media = 7.5,
+            nome = "Matemática",
+            professor = "Dr. Silva",
+            nota1 = 8.5,
+            nota2 = 7.0,
+            media = 7.75,
             faltas = 2
         )
     )

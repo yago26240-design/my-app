@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UnidadeCurricularViewModel(
-    private val repository: UnidadeCurricularRepository
-): ViewModel() {
+    private val repository : UnidadeCurricularRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UnidadeCurricularUiState())
-    val uiState: StateFlow<UnidadeCurricularUiState> = _uiState.asStateFlow()
-    fun carregar(){
+    val uiState:StateFlow<UnidadeCurricularUiState> = _uiState.asStateFlow()
+    fun carregar() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
@@ -23,12 +23,12 @@ class UnidadeCurricularViewModel(
                     errorMessage = null
                 )
             }
-            repository.listarUnidadesCurriculares()
-                .onSuccess { listaUnidadesCurriculares ->
+            repository.listar()
+                .onSuccess { unidades ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            listaUnidadesCurriculares = listaUnidadesCurriculares,
+                            unidades = unidades,
                             errorMessage = null
                         )
                     }
@@ -40,7 +40,6 @@ class UnidadeCurricularViewModel(
                             errorMessage = throwable.message ?: "Erro ao carregar unidades curriculares."
                         )
                     }
-
                 }
         }
     }

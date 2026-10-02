@@ -6,52 +6,81 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.senai.mycarterinhasenai.R
 
 @Composable
-fun PefilAluno (
+fun PerfilAluno(
     nome: String,
+    matricula: String,
     curso: String,
-    idFoto: Int = R.drawable.loginft
-){
+    idFoto: Int =
+        R.drawable.loginft
+) {
+
     Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement =
+            Arrangement.spacedBy(
+                10.dp
+            ),
+        horizontalAlignment =
+            Alignment.CenterHorizontally
     ) {
+
         Image(
-            painter = painterResource(id = idFoto),
-            "foto de perfil",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(200.dp)
-                .clip(CircleShape)
-                .border(
-                    width = 2.dp,
-                    Color.White,
-                    CircleShape
-                )
+            painter =
+                painterResource(
+                    id = idFoto
+                ),
+            contentDescription =
+                "Foto do aluno",
+            contentScale =
+                ContentScale.Crop,
+            modifier =
+                Modifier
+                    .size(180.dp)
+                    .clip(
+                        CircleShape
+                    )
+                    .border(
+                        width = 2.dp,
+                        color =
+                            MaterialTheme
+                                .colorScheme
+                                .primary,
+                        shape =
+                            CircleShape
+                    )
         )
 
         InfoAluno(
-            label = "nome",
+            label = "Nome",
             value = nome
         )
+
         InfoAluno(
-            label = "curso",
+            label = "Matrícula",
+            value = matricula,
+            fontSizeValue = 22.sp,
+            fontWeightValue =
+                FontWeight.SemiBold
+        )
+
+        InfoAluno(
+            label = "Curso",
             value = curso,
-            fontSizeValue = 25.sp,
-
-            )
-
-
+            fontSizeValue = 22.sp,
+            fontWeightValue =
+                FontWeight.Normal
+        )
     }
 }

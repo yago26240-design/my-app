@@ -8,23 +8,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
-
 @Composable
-
 fun ValueText(
     modifier: Modifier = Modifier,
     text: String,
     fontSize: TextUnit = 35.sp,
     fontWeight: FontWeight = FontWeight.Bold
-
 ) {
     Text(
         text = text,
-        color = Color.White,
         fontSize = fontSize,
+        color = Color.Black,
         fontWeight = fontWeight,
         modifier = modifier
-
     )
-
 }

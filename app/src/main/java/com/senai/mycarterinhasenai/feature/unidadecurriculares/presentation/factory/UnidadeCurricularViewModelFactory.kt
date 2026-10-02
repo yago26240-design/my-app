@@ -6,8 +6,9 @@ import com.senai.mycarterinhasenai.feature.unidadecurriculares.domain.repository
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.presentation.UnidadeCurricularViewModel
 
 class UnidadeCurricularViewModelFactory(
-    private val repository: UnidadeCurricularRepository
+    private val repository:UnidadeCurricularRepository
 ) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UnidadeCurricularViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

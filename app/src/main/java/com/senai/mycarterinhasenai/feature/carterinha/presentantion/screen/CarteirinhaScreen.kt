@@ -6,46 +6,65 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.rafaelcosta.myapplication.QrCode
 import com.senai.mycarterinhasenai.R
 import com.senai.mycarterinhasenai.feature.carterinha.presentantion.component.PefilAluno
+import com.senai.mycarterinhasenai.feature.carterinha.presentantion.component.PerfilAluno
+import com.senai.mycarterinhasenai.feature.login.domain.model.UsuarioLogado
+import com.senai.mycarterinhasenai.myapplication.QrCode
 
 
 @Composable
 fun CarteirinhaScreen(
+    usuarioLogado: UsuarioLogado,
     modifier: Modifier = Modifier
-){
-    Box {
+) {
+
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+
         Image(
             painter = painterResource(id = R.drawable.imagemfundo),
-            "Fundo",
-            modifier = Modifier.fillMaxSize(),
+            contentDescription = "Fundo",
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.35f),
             contentScale = ContentScale.Crop
         )
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxSize()
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
         ) {
+
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                "logo senai",
-                modifier = Modifier.fillMaxWidth(fraction = 0.8f)
+                contentDescription = "Logo Senai",
+                modifier = Modifier
+                    .fillMaxWidth(0.72f)
             )
-            PefilAluno(
-                nome = "yago silva",
-                curso = "sistema",
 
-                )
+            PerfilAluno(
+                nome = usuarioLogado.nome,
+                matricula = usuarioLogado.matricula,
+                curso = usuarioLogado.curso
+            )
+
             QrCode(
-                conteudo = "9000000001755239490"
+                conteudo = usuarioLogado.matricula
             )
-
         }
     }
 }

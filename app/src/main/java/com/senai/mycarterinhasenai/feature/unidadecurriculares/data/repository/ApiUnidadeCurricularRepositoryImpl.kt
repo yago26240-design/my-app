@@ -8,29 +8,27 @@ import retrofit2.HttpException
 
 class ApiUnidadeCurricularRepositoryImpl(
     private val api: UnidadeCurricularApi
-): UnidadeCurricularRepository {
-    override suspend fun listarUnidadesCurriculares(): Result<List<UnidadeCurricular>> {
+) : UnidadeCurricularRepository {
+
+    override suspend fun listar(): Result<List<UnidadeCurricular>> {
         return runCatching {
-            api.listarUnidadesCurriculares().map {
+            api.listar().map {
                 it.toDomain()
             }
         }.recoverCatching { throwable ->
-            throw when(throwable){
-                is HttpException ->{
-                    if (throwable.code()==401){
-                        IllegalStateException("Sua sessão expirou. Faça logn novamente")
-                    }else{
-                        IllegalStateException("Erro ao carregar unidades curriculares (${throwable.code()})")
+            throw when (throwable) {
+                is HttpException -> {
+                    if (throwable.code() == 401) {
+                        IllegalStateException("Sua sessão expirou. Faça login novamente.")
+                    } else {
+                        IllegalStateException("Erro ao carregar unidades curriculares (${throwable.code()}).")
                     }
                 }
                 is IOException ->
-                    IllegalStateException("Não foi possivel conectar na API")
+                    IllegalStateException("Não foi possível conectar à API.")
                 else ->
-                    IllegalStateException(throwable.message ?: "Erro ao carregar unidades curriculares")
+                    IllegalStateException(throwable.message ?: "Erro ao carregar unidades curriculares.")
             }
-
         }
-
     }
-
 }
