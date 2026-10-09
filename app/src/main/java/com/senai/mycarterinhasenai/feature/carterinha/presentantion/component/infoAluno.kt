@@ -13,16 +13,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-
 fun InfoAluno(
-    modifier: Modifier= Modifier,
+    modifier: Modifier = Modifier,
     label: String,
     value: String,
-    fontWeightValue: FontWeight = FontWeight.Bold,
-    fontSizeValue: TextUnit= 35.sp
-
-) {
-
+    fontSizeValue: TextUnit = 35.sp,
+    fontWeightValue: FontWeight = FontWeight.Bold
+){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -30,17 +27,15 @@ fun InfoAluno(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
     ) {
-        Labeltext(
+        LabelText(
             text = label,
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
         )
         ValueText(
             text = value,
             fontSize = fontSizeValue,
             fontWeight = fontWeightValue,
-            modifier = Modifier
-                .weight(3f)
+            modifier = Modifier.weight(3f)
         )
     }
 }

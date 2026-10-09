@@ -2,8 +2,6 @@ package com.senai.mycarterinhasenai.app.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,9 +38,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rafaelcosta.carteirinhadigital2devest.R
-import com.rafaelcosta.carteirinhadigital2devest.feature.login.domain.model.UsuarioLogado
+import com.senai.mycarterinhasenai.R
 import com.senai.mycarterinhasenai.feature.login.domain.model.UsuarioLogado
+
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +77,7 @@ fun AppShell(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.login),
+                        painter = painterResource(id = R.drawable.loginft),
                         contentDescription = "Avatar do usuário",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

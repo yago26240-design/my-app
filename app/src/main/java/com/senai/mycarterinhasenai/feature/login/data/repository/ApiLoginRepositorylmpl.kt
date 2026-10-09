@@ -22,6 +22,7 @@ class ApiLoginRepositoryImpl(private val api: AuthApi) : LoginRepository {
                 id = response.id,
                 nome = response.nome,
                 matricula = response.matricula,
+                perfil = response.perfil,
                 curso = response.curso,
                 turma = response.turma,
                 token = response.token

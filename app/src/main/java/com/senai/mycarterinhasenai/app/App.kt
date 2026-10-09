@@ -8,7 +8,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
 import com.senai.mycarterinhasenai.app.di.AppContainer
-import com.senai.mycarterinhasenai.app.di.AppNavHost
 import com.senai.mycarterinhasenai.app.navigation.AppNavHost
 import com.senai.mycarterinhasenai.core.designsystem.theme.MyCarterinhaSenaiTheme
 

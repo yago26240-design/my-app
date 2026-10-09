@@ -14,9 +14,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.rafaelcosta.myapplication.QrCode
 import com.senai.mycarterinhasenai.R
-import com.senai.mycarterinhasenai.feature.carterinha.presentantion.component.PefilAluno
 import com.senai.mycarterinhasenai.feature.carterinha.presentantion.component.PerfilAluno
 import com.senai.mycarterinhasenai.feature.login.domain.model.UsuarioLogado
 import com.senai.mycarterinhasenai.myapplication.QrCode

@@ -3,31 +3,28 @@ import com.senai.mycarterinhasenai.feature.login.domain.model.UsuarioLogado
 import com.senai.mycarterinhasenai.feature.login.domain.repository.LoginRepository
 import kotlinx.coroutines.delay
 
-class FakeLoginRepositoryImpl : LoginRepository {
-
+class FakeAuthRepository : LoginRepository {
     override suspend fun login(
-        usuario: String,
+        login: String,
         senha: String
-    ): Result<UsuarioLogado>{
-        delay(timeMillis = 1500)
+    ): Result<UsuarioLogado> {
 
-        return if(usuario.equals("aluno") && senha.equals("123")){
+        delay(1500)
+
+        return if (login.equals("aluno", ignoreCase = true) && senha == "123") {
             Result.success(
-                value = UsuarioLogado(
+                UsuarioLogado(
                     id = "1",
-                    nome = "yago silva",
-                    curso = "DS",
-                    turma = "Devest-b",
+                    nome = "Rafael Costa",
+                    matricula = "2026000001",
+                    perfil = "ALUNO",
+                    curso = "Desenvolvimento de Sistemas",
+                    turma = "2DEVEST-A",
                     token = "token-fake-para-aula"
-
                 )
             )
-        }else {
-            Result.failure(
-                exception = IllegalArgumentException(
-                    "Login ou senha invalidos"
-                )
-            )
+        } else {
+            Result.failure(IllegalArgumentException("Login ou senha inválidos"))
         }
     }
 }

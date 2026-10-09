@@ -2,6 +2,7 @@ package com.senai.mycarterinhasenai.app.session
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.senai.mycarterinhasenai.core.auth.SessionTokenStore
 
 class SessionViewModelFactory(
 private val sessionTokenStore : SessionTokenStore

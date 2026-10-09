@@ -99,6 +99,7 @@ fun HomeScreenPreview() {
                 id = "1",
                 nome = "Rafael Costa",
                 matricula = "2026000001",
+                perfil = "ALUNO",
                 curso = "Desenvolvimento de Sistemas",
                 turma = "2DEVEST-A",
                 token = "token"

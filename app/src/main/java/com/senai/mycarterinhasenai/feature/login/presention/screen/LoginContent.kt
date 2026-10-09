@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.senai.mycarterinhasenai.core.designsystem.theme.MyCarterinhaSenaiTheme
 import com.senai.mycarterinhasenai.feature.login.presention.LoginEvent
+import com.senai.mycarterinhasenai.feature.login.presention.LoginUiState
 
 @Composable
 fun LoginContent(
@@ -124,7 +125,7 @@ private fun LoginContentPreview() {
 @Preview(showBackground = true, name = "Login Error")
 @Composable
 private fun LoginContentErrorPreview() {
-    CarteirinhaDigital2DEVESTTheme {
+    MyCarterinhaSenaiTheme {
         LoginContent(
             modifier = Modifier.fillMaxSize(),
             uiState = LoginUiState(
