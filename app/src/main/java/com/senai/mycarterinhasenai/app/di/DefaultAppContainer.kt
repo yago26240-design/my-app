@@ -8,17 +8,59 @@ import com.senai.mycarterinhasenai.feature.login.domain.repository.LoginReposito
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.data.repository.ApiUnidadeCurricularRepositoryImpl
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
-import com.senai.mycarterinhasenai.feature.professor.data.remote.service.ProfessorApi
-import com.senai.mycarterinhasenai.feature.professor.data.repository.ApiProfessorRepositoryImpl
-import com.senai.mycarterinhasenai.feature.professor.domain.repository.ProfessorRepository
+import com.senai.mycarterinhasenai.feature.professor.turmas.data.remote.service.TurmaProfessorApi
+import com.senai.mycarterinhasenai.feature.professor.turmas.data.repository.ApiTurmaProfessorRepositoryImpl
+import com.senai.mycarterinhasenai.feature.professor.turmas.domain.repository.TurmaProfessorRepository
+import com.senai.mycarterinhasenai.feature.professor.unidadecurriculares.data.remote.service.UnidadeCurricularProfessorApi
+import com.senai.mycarterinhasenai.feature.professor.unidadecurriculares.data.repository.ApiUnidadeCurricularProfessorRepositoryImpl
+import com.senai.mycarterinhasenai.feature.professor.unidadecurriculares.domain.repository.UnidadeCurricularProfessorRepository
 
-class DefaultAppContainer:AppContainer {
- override val sessionTokenStore=SessionTokenStore()
- private val networkClient=NetworkClient("http://10.0.2.2:8080/",sessionTokenStore)
- private val authApi by lazy { networkClient.createPublic(AuthApi::class.java) }
- private val alunoApi by lazy { networkClient.createAuthenticated(UnidadeCurricularApi::class.java) }
- private val professorApi by lazy { networkClient.createAuthenticated(ProfessorApi::class.java) }
- override val loginRepository:LoginRepository by lazy { ApiLoginRepositoryImpl(authApi) }
- override val unidadeCurricularRepository:UnidadeCurricularRepository by lazy { ApiUnidadeCurricularRepositoryImpl(alunoApi) }
- override val professorRepository:ProfessorRepository by lazy { ApiProfessorRepositoryImpl(professorApi) }
+
+class DefaultAppContainer : AppContainer {
+    override val sessionTokenStore : SessionTokenStore = SessionTokenStore()
+    private val networkClient =
+        NetworkClient(
+            baseUrl = BASE_URL,
+            sessionTokenStore = sessionTokenStore
+        )
+
+    private val authApi : AuthApi by lazy {
+        networkClient.createPublic(
+            AuthApi::class.java
+        )
+    }
+    private val unidadeCurricularApi : UnidadeCurricularApi by lazy {
+        networkClient.createAuthenticated(
+            UnidadeCurricularApi::class.java
+        )
+    }
+    override val loginRepository : LoginRepository by lazy {
+        ApiLoginRepositoryImpl(
+            api = authApi
+        )
+    }
+    override val unidadeCurricularRepository : UnidadeCurricularRepository by lazy {
+        ApiUnidadeCurricularRepositoryImpl(
+            api = unidadeCurricularApi
+        )
+    }
+    private val turmaProfessorApi : TurmaProfessorApi by lazy {
+        networkClient.createAuthenticated(TurmaProfessorApi::class.java)
+    }
+
+    private val ucProfessorApi : UnidadeCurricularProfessorApi by lazy {
+        networkClient.createAuthenticated(UnidadeCurricularProfessorApi::class.java)
+    }
+
+    override val turmaProfessorRepository : TurmaProfessorRepository by lazy {
+        ApiTurmaProfessorRepositoryImpl(api = turmaProfessorApi)
+    }
+
+    override val unidadeCurricularProfessorRepository : UnidadeCurricularProfessorRepository by lazy {
+        ApiUnidadeCurricularProfessorRepositoryImpl(api = ucProfessorApi)
+    }
+
+    companion object {
+        private const val BASE_URL = "http://10.0.2.2:8080/"
+    }
 }

@@ -21,99 +21,253 @@ import com.senai.mycarterinhasenai.feature.home.presentation.screen.HomeScreen
 import com.senai.mycarterinhasenai.feature.login.presention.LoginViewModel
 import com.senai.mycarterinhasenai.feature.login.presention.factory.LoginViewModelFactory
 import com.senai.mycarterinhasenai.feature.login.presention.screen.LoginScreen
-import com.senai.mycarterinhasenai.feature.professor.presentation.ProfessorViewModel
-import com.senai.mycarterinhasenai.feature.professor.presentation.factory.ProfessorViewModelFactory
-import com.senai.mycarterinhasenai.feature.professor.presentation.screen.TurmasProfessorScreen
-import com.senai.mycarterinhasenai.feature.professor.presentation.screen.UcsProfessorScreen
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.presentation.UnidadeCurricularViewModel
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.presentation.factory.UnidadeCurricularViewModelFactory
 import com.senai.mycarterinhasenai.feature.unidadecurriculares.presentation.screen.UnidadeCurricularScreen
+import com.senai.mycarterinhasenai.feature.professor.turmas.presentation.TurmaProfessorViewModel
+import com.senai.mycarterinhasenai.feature.professor.turmas.presentation.factory.TurmaProfessorViewModelFactory
+import com.senai.mycarterinhasenai.feature.professor.turmas.presentation.screen.TurmaProfessorScreen
+import com.senai.mycarterinhasenai.feature.professor.unidadecurriculares.presentation.UnidadeCurricularProfessorViewModel
+import com.senai.mycarterinhasenai.feature.professor.unidadecurriculares.presentation.factory.UnidadeCurricularProfessorViewModelFactory
+import com.senai.mycarterinhasenai.feature.professor.unidadecurriculares.presentation.screen.UnidadeCurricularProfessorScreen
 
 @Composable
-fun AppNavHost(navController:NavHostController,darkTheme:Boolean,onDarkThemeChange:(Boolean)->Unit,container:AppContainer){
- val session:SessionViewModel=viewModel(factory=remember(container){SessionViewModelFactory(container.sessionTokenStore)})
- val usuario by session.usuarioLogado.collectAsStateWithLifecycle()
- val professor=usuario?.perfil?.equals("PROFESSOR",ignoreCase=true)==true
+fun AppNavHost(
+    navController: NavHostController,
+    darkTheme: Boolean,
+    onDarkThemeChange: (Boolean) -> Unit,
+    container: AppContainer
+) {
+    val sessionFactory = remember(container.sessionTokenStore) {
+        SessionViewModelFactory(
+            sessionTokenStore = container.sessionTokenStore
+        )
+    }
 
- fun logout(){
-  session.limparSessao()
-  navController.navigate(Routes.Login.route){
-   popUpTo(navController.graph.id){inclusive=true}
-   launchSingleTop=true
-  }
- }
+    val sessionViewModel: SessionViewModel = viewModel(factory = sessionFactory)
+    val usuarioLogado by sessionViewModel.usuarioLogado.collectAsStateWithLifecycle()
+    val usuario = usuarioLogado
 
- NavHost(navController=navController,startDestination=Routes.Login.route){
-  composable(Routes.Login.route){
-   val vm:LoginViewModel=viewModel(factory=remember(container){LoginViewModelFactory(container.loginRepository)})
-   LoginScreen(viewModel=vm,onLoginSucesso={u->
-    session.setUsuarioLogado(u)
-    navController.navigate(if(u.perfil.equals("PROFESSOR",true)) Routes.HomeProfessor.route else Routes.HomeAluno.route){
-     popUpTo(Routes.Login.route){inclusive=true}
-     launchSingleTop=true
+    fun logout() {
+        sessionViewModel.limparSessao()
+        navController.navigate(Routes.Login.route) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
     }
-   })
-  }
-  composable(Routes.HomeAluno.route){
-   val u=usuario
-   if(u==null || professor){RedirecionarParaLogin(navController)}
-   else AppShell("Início",u,false,darkTheme,onDarkThemeChange,{},::logout){padding->
-    HomeScreen(navController,u,Modifier.fillMaxSize().padding(padding))
-   }
-  }
-  composable(Routes.Carteirinha.route){
-   val u=usuario
-   if(u==null || professor){RedirecionarParaLogin(navController)}
-   else AppShell("Carteirinha",u,true,darkTheme,onDarkThemeChange,{navController.popBackStack()},::logout){padding->
-    CarteirinhaScreen(u,Modifier.fillMaxSize().padding(padding))
-   }
-  }
-  composable(Routes.UCAluno.route){
-   val u=usuario
-   if(u==null || professor){RedirecionarParaLogin(navController)}
-   else {
-    val vm:UnidadeCurricularViewModel=viewModel(factory=remember(container){UnidadeCurricularViewModelFactory(container.unidadeCurricularRepository)})
-    AppShell("Unidades Curriculares",u,true,darkTheme,onDarkThemeChange,{navController.popBackStack()},::logout){padding->
-     UnidadeCurricularScreen(viewModel=vm,modifier=Modifier.fillMaxSize().padding(padding))
+
+    NavHost(
+        navController = navController,
+        startDestination = Routes.Login.route
+    ) {
+
+        composable(Routes.Login.route) {
+            val loginFactory = remember(
+                container.loginRepository
+            ) {
+                LoginViewModelFactory(
+                    repository = container.loginRepository
+                )
+            }
+
+            val loginViewModel: LoginViewModel = viewModel(factory = loginFactory)
+
+            LoginScreen(
+                viewModel = loginViewModel,
+                onLoginSucesso = { usuario ->
+                    sessionViewModel.setUsuarioLogado(usuario)
+                    navController.navigate(if (usuario.perfil.equals("PROFESSOR", ignoreCase = true)) Routes.HomeProfessor.route else Routes.HomeAluno.route) {
+                        popUpTo(Routes.Login.route) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(
+            Routes.HomeAluno.route
+        ) {
+            if (usuario == null || usuario.perfil.equals("PROFESSOR", ignoreCase = true)) {
+                RedirecionarParaLogin(navController)
+            } else {
+                AppShell(
+                    title = "Início",
+                    usuarioLogado = usuario,
+                    canNavigateBack = false,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = { },
+                    onLogout = {
+                        logout()
+                    }
+                ) { innerPadding ->
+                    HomeScreen(
+                        navController = navController,
+                        usuarioLogado = usuario,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(Routes.Carteirinha.route) {
+            if (usuario == null || usuario.perfil.equals("PROFESSOR", ignoreCase = true)) {
+                RedirecionarParaLogin(navController)
+            } else {
+                AppShell(
+                    title = "Carteirinha",
+                    usuarioLogado = usuario,
+                    canNavigateBack = true,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onLogout = {
+                        logout()
+                    }
+                ) { innerPadding ->
+                    CarteirinhaScreen(
+                        usuarioLogado = usuario,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(Routes.UCAluno.route) {
+            if (usuario == null || usuario.perfil.equals("PROFESSOR", ignoreCase = true)) {
+                RedirecionarParaLogin(navController)
+            } else {
+                val ucFactory = remember(container.unidadeCurricularRepository) {
+                    UnidadeCurricularViewModelFactory(
+                        repository = container.unidadeCurricularRepository
+                    )
+                }
+                val ucViewModel: UnidadeCurricularViewModel = viewModel(factory = ucFactory)
+
+                AppShell(
+                    title = "Unidades Curriculares",
+                    usuarioLogado = usuario,
+                    canNavigateBack = true,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onLogout = {
+                        logout()
+                    }
+                ) { innerPadding ->
+                    UnidadeCurricularScreen(
+                        viewModel = ucViewModel,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(Routes.HomeProfessor.route) {
+            if (usuario == null || !usuario.perfil.equals("PROFESSOR", ignoreCase = true)) {
+                RedirecionarParaLogin(navController)
+            } else {
+                AppShell(
+                    title = "Início",
+                    usuarioLogado = usuario,
+                    canNavigateBack = false,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = { },
+                    onLogout = { logout() }
+                ) { innerPadding ->
+                    HomeScreen(
+                        navController = navController,
+                        usuarioLogado = usuario,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(Routes.TurmasProfessor.route) {
+            if (usuario == null || !usuario.perfil.equals("PROFESSOR", ignoreCase = true)) {
+                RedirecionarParaLogin(navController)
+            } else {
+                val turmasFactory = remember(container.turmaProfessorRepository) {
+                    TurmaProfessorViewModelFactory(
+                        repository = container.turmaProfessorRepository
+                    )
+                }
+                val turmasViewModel: TurmaProfessorViewModel = viewModel(factory = turmasFactory)
+
+                AppShell(
+                    title = "Turmas",
+                    usuarioLogado = usuario,
+                    canNavigateBack = true,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = { navController.popBackStack() },
+                    onLogout = { logout() }
+                ) { innerPadding ->
+                    TurmaProfessorScreen(
+                        viewModel = turmasViewModel,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(Routes.UCProfessor.route) {
+            if (usuario == null || !usuario.perfil.equals("PROFESSOR", ignoreCase = true)) {
+                RedirecionarParaLogin(navController)
+            } else {
+                val ucProfessorFactory = remember(container.unidadeCurricularProfessorRepository) {
+                    UnidadeCurricularProfessorViewModelFactory(
+                        repository = container.unidadeCurricularProfessorRepository
+                    )
+                }
+                val ucProfessorViewModel: UnidadeCurricularProfessorViewModel =
+                    viewModel(factory = ucProfessorFactory)
+
+                AppShell(
+                    title = "Unidades Curriculares",
+                    usuarioLogado = usuario,
+                    canNavigateBack = true,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = { navController.popBackStack() },
+                    onLogout = { logout() }
+                ) { innerPadding ->
+                    UnidadeCurricularProfessorScreen(
+                        viewModel = ucProfessorViewModel,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding)
+                    )
+                }
+            }
+        }
     }
-   }
-  }
-  composable(Routes.HomeProfessor.route){
-   val u=usuario
-   if(u==null || !professor){RedirecionarParaLogin(navController)}
-   else AppShell("Portal Professor",u,false,darkTheme,onDarkThemeChange,{},::logout){padding->
-    HomeScreen(navController,u,Modifier.fillMaxSize().padding(padding))
-   }
-  }
-  composable(Routes.TurmasProfessor.route){
-   val u=usuario
-   if(u==null || !professor){RedirecionarParaLogin(navController)}
-   else {
-    val vm:ProfessorViewModel=viewModel(factory=remember(container){ProfessorViewModelFactory(container.professorRepository)})
-    AppShell("Minhas Turmas",u,true,darkTheme,onDarkThemeChange,{navController.popBackStack()},::logout){padding->
-     TurmasProfessorScreen(vm,Modifier.fillMaxSize().padding(padding))
-    }
-   }
-  }
-  composable(Routes.UCProfessor.route){
-   val u=usuario
-   if(u==null || !professor){RedirecionarParaLogin(navController)}
-   else {
-    val vm:ProfessorViewModel=viewModel(factory=remember(container){ProfessorViewModelFactory(container.professorRepository)})
-    AppShell("UCs do Professor",u,true,darkTheme,onDarkThemeChange,{navController.popBackStack()},::logout){padding->
-     UcsProfessorScreen(vm,Modifier.fillMaxSize().padding(padding))
-    }
-   }
-  }
- }
 }
 
 @Composable
-private fun RedirecionarParaLogin(navController:NavHostController){
- LaunchedEffect(Unit){
-  navController.navigate(Routes.Login.route){
-   popUpTo(navController.graph.id){inclusive=true}
-   launchSingleTop=true
-  }
- }
+private fun RedirecionarParaLogin(
+    navController:NavHostController
+) {
+    LaunchedEffect(Unit) {
+        navController.navigate( Routes.Login.route) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
 }
