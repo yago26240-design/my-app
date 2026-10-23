@@ -1,53 +1,28 @@
 package com.senai.mycarterinhasenai.core.designsystem.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.text.googlefonts.Font
-import com.senai.mycarterinhasenai.R
-
-val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-
-val bodyFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("AR One Sans"),
-        fontProvider = provider,
-    )
-)
-
-val displayFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Alice"),
-        fontProvider = provider,
-    )
-)
-
-// Default Material 3 typography values
-val baseline = Typography()
+// Tipografia simples e legível, aplicada globalmente pelo MaterialTheme.
+// Mantém a mesma aparência nos perfis Aluno e Professor.
+private val base = Typography()
+private val fonte = FontFamily.SansSerif
 
 val AppTypography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
-    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
-    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
-    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
-    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
-    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
-    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
-    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
-    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
-    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
+    displayLarge = base.displayLarge.copy(fontFamily = fonte, fontWeight = FontWeight.Bold),
+    displayMedium = base.displayMedium.copy(fontFamily = fonte, fontWeight = FontWeight.Bold),
+    displaySmall = base.displaySmall.copy(fontFamily = fonte, fontWeight = FontWeight.Bold),
+    headlineLarge = base.headlineLarge.copy(fontFamily = fonte, fontWeight = FontWeight.Bold),
+    headlineMedium = base.headlineMedium.copy(fontFamily = fonte, fontWeight = FontWeight.Bold),
+    headlineSmall = base.headlineSmall.copy(fontFamily = fonte, fontWeight = FontWeight.Bold),
+    titleLarge = base.titleLarge.copy(fontFamily = fonte, fontWeight = FontWeight.SemiBold),
+    titleMedium = base.titleMedium.copy(fontFamily = fonte, fontWeight = FontWeight.SemiBold),
+    titleSmall = base.titleSmall.copy(fontFamily = fonte, fontWeight = FontWeight.SemiBold),
+    bodyLarge = base.bodyLarge.copy(fontFamily = fonte),
+    bodyMedium = base.bodyMedium.copy(fontFamily = fonte),
+    bodySmall = base.bodySmall.copy(fontFamily = fonte),
+    labelLarge = base.labelLarge.copy(fontFamily = fonte, fontWeight = FontWeight.Medium),
+    labelMedium = base.labelMedium.copy(fontFamily = fonte, fontWeight = FontWeight.Medium),
+    labelSmall = base.labelSmall.copy(fontFamily = fonte, fontWeight = FontWeight.Medium)
 )
-
